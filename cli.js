@@ -2,15 +2,14 @@
 const fs = require("fs");
 const [,, ...args] = process.argv
 const Folders = [{name:"Routers"},{name:"Controllers"},{name:"Modules"},{name:"Schema"}]
-
 const FolderFonction =  {
     Schema: function SchemaContent(){
         return `
         const mongoose = require('mongoose');
-const Support = mongoose.Schema({
+const ${process.argv[2]} = mongoose.Schema({
 },{timestamps:true})
-mongoose.model('Support',Support);
-module.exports = mongoose.model('Support',Support );
+mongoose.model('${process.argv[2]}',${process.argv[2]});
+module.exports = mongoose.model('${process.argv[2]}',${process.argv[2]} );
         `
     },
     Modules: function ModuleContent(){
@@ -123,15 +122,16 @@ const CreateFile =(Folder) => {
                 }
             });
             Folder == 'Routers' && fs.appendFile(`./${Folder}/index.js`, 
-                `const express = require("express");
-const router = express.Router()
+                `
 const ${process.argv[2]}Routers = require('./${process.argv[2]}.Routers');
 router.use("/${process.argv[2]}", ${process.argv[2]}Routers);
-module.exports = router
                 `, function (err) {
                 if (err) throw err;
-                console.log('Saved!');
             });
+            console.log(`New  ${Folder}  created successfully !!`);
+        }
+        else{
+            console.log(`file already exists with  name ${process.argv[2]} in Folder ${Folder}`);
         }
 
 }
@@ -143,18 +143,22 @@ const CreateFolder = (Folder) =>{
             if (error) {
               console.log(error);
             } else {
-                fs.writeFile(`./${Folder}/index.js`,"", err => {
+                Folder == 'Routers' && fs.writeFile(`./${Folder}/index.js`,
+`
+const express = require("express");
+const router = express.Router()
+module.exports = router
+`
+                , err => {
                     if (err) {
                         console.error(err);
                     }
                 });
               CreateFile(Folder)
-              console.log("New Directory created successfully !!");
             }
           });
         } else {
             CreateFile(Folder)
-            console.log("Given Directory already exists !!");
         }
       });
 }

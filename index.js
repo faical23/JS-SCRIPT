@@ -4,11 +4,10 @@ const port = 3030
 app.use(express.json())
 const cors = require('cors')
 app.use(cors())
-/// IMPORT DB
+// IMPORT DB
 // require('./Config')
-
-/// IMPORT ROUTER
-const RouterV1 = require('./Routers');
+// IMPORT ROUTER
+// const RouterV1 = require('./Routers');
 // app.use("/api/v1", RouterV1);
 
 app.get('/', (req, res) => {
